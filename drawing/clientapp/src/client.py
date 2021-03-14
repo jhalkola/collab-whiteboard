@@ -122,6 +122,12 @@ while not done:
         if topic == image_update_topic:
             msg, left = unpack_helper_part("8si7500s", data)
             user_count = msg[1]
+            users = {}
+            for i in range(user_count):
+                user, left = unpack_helper_part("16s7s", left)
+                user_name = user[0].decode('utf-8')
+                user_color = user[1].decode('utf-8')
+                users[user_name] = user_color
             img = pygame.image.fromstring(msg[2],(50,50), "RGB")
             image.blit(img, (0, 0))
     except Exception as e:
