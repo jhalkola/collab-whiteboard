@@ -1,0 +1,14 @@
+version: "3.9"
+networks:
+  drawing_web:
+    external: true
+services:
+  clientd:
+    build: .
+    command: ["python", "-u", "client.py"]
+    environment:
+      SERVER_CONNECT_URI: tcp://serverd
+      DISPLAY: 
+      NAME:
+    networks:
+      drawing_web:
