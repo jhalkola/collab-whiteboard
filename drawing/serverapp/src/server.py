@@ -4,17 +4,25 @@ import struct
 from time import sleep
 import pygame
 import os
+import json
 
 address = os.environ.get("SERVER_LISTEN_URI")
+
+def get_colors():
+    with open("colors.json") as file:
+        data = json.load(file)
+    return data.values()
 
 def unpack_helper(fmt, data):
     size = struct.calcsize(fmt)
     return struct.unpack(fmt, data[:size])
 
 def main():
+    all_colors = list(get_colors())
     connect_message_format = "8s16s"
     client_draw_topic = b'drw_updt'
     image_update_topic = b'img_updt'
+    client_disc_topic = b'clt_disc'
 
     server_to_client_port = 8000
     client_to_server_port = 8001
@@ -24,6 +32,7 @@ def main():
     sub.bind("tcp://*:{}".format(client_to_server_port))
     sub.setsockopt(zmq.SUBSCRIBE, client_draw_topic)
     sub.setsockopt(zmq.SUBSCRIBE, image_update_topic)
+    sub.setsockopt(zmq.SUBSCRIBE, client_disc_topic)
     pub = context.socket(zmq.PUB)
     pub.bind("tcp://*:{}".format(server_to_client_port))
 
@@ -38,10 +47,12 @@ def main():
             data = sub.recv(zmq.NOBLOCK)
             topic = unpack_helper("8s", data)[0]
             if topic == client_draw_topic:
-                _, color, x, y = struct.unpack("8s7sii", data)
+                _, user, x, y = struct.unpack("8s16sii", data)
+                color = users[user.decode('utf-8')]
+                #print("Draw from user: {} {}".format(user, users[user.decode('utf-8')]))
                 x = int(x)
                 y = int(y)
-                color = pygame.Color(color.decode('utf-8'))
+                color = pygame.Color(color)
                 pygame.draw.rect(image, color, (x, y, 1, 1))
                 userdata = ""
                 
@@ -51,6 +62,10 @@ def main():
 
                 response = struct.pack("8si7500s{}s".format(len(user)*23), image_update_topic, len(users), imagedata, userdata.encode('utf-8'))
                 pub.send(response)
+            if topic == client_disc_topic:
+                _, user = struct.unpack("8s16s", data)
+                del(users[user.decode('utf-8')])
+                print("User left: {}".format(user.decode('utf-8')))
 
                 
         except Exception as e:
@@ -67,9 +82,12 @@ def main():
             else:
                 print("Adding user: {}".format(new_name))
                 form = "ii7s7500s{}s".format(len(users)*23)
-                color = "#AAAAAA"
+                color = ""
+                for c in all_colors:
+                    if not c in users.values():
+                        color = c
+                        break
                 users[new_name] = color
-                
                 colordata = color.encode('utf-8')
                 userdata = ""
                 

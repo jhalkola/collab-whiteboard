@@ -5,6 +5,9 @@ import struct
 from time import sleep
 from sys import argv
 import os
+import atexit
+
+
 
 
 print("I am alive")
@@ -16,10 +19,18 @@ def unpack_helper_part(fmt, data):
     size = struct.calcsize(fmt)
     return struct.unpack(fmt, data[:size]), data[size:]
 
+def exit_handler():
+    global pub
+    global name
+    global client_disc_topic
+    message = struct.pack("8s16s", client_disc_topic, name.encode('utf-8'))
+    pub.send(message)
+
 connect_message_format = "8s16s"
 connect_message_topic = b'cnt_mesg'
 client_draw_topic = b'drw_updt'
 image_update_topic = b'img_updt'
+client_disc_topic = b'clt_disc'
 
 
 server_to_client_port = 8000
@@ -32,6 +43,7 @@ image_as_string = ""
 
 name = os.environ.get('NAME')
 server = "tcp://serverd"#os.environ.get('SERVER_CONNECT_URI')
+atexit.register(exit_handler)
 while True:
     print("Give your name:")
     
@@ -130,7 +142,7 @@ while not done:
         x = math.floor(x/scale)
         y = math.floor(y/scale)
         if mouseWasPressed == False or mouse_prev_x != x or mouse_prev_y != y:
-            message = struct.pack("8s7sii", client_draw_topic, own_color.encode('utf-8'), x, y)
+            message = struct.pack("8s16sii", client_draw_topic, name.encode('utf-8'), x, y)
             pub.send(message)
         mouse_prev_x = x
         mouse_prev_y = y
