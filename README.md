@@ -32,3 +32,13 @@ If you make changes to the python files remember to rebuild the composes using:
 docker-compose build
 ```
 in their respective folders
+
+#To-do
+- data logging
+- saving the image on server side
+- showing names in client (Already received and stored in users-dictionary)
+- documentating
+- commenting the code
+
+Data loggausta ja kuvan tallennusta varten:
+https://docs.docker.com/storage/volumes/
