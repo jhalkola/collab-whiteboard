@@ -2,6 +2,8 @@
 Distributed Systems course project
 
 # Running
+When starting the X11 server, in extra setting Disable access control needs to be ticked.
+
 Before usage you need to set few environmental variables
 To set the X11 display set:
 ```
