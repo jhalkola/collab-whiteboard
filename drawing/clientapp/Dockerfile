@@ -8,5 +8,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY src/ .
+RUN mkdir log
 
 cmd ["python", "-u", "./client.py"]

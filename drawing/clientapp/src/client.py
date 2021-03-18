@@ -10,7 +10,6 @@ import atexit
 
 
 
-print("I am alive")
 def unpack_helper(fmt, data):
     size = struct.calcsize(fmt)
     return struct.unpack(fmt, data[:size])
@@ -94,7 +93,7 @@ scale = 10
 display_width = 50*scale
 display_height = 50*scale
 
-gameDisplay = pygame.display.set_mode((display_width, display_height))
+gameDisplay = pygame.display.set_mode((display_width+200, display_height))
 pygame.display.set_caption("Client")
 
 image = pygame.image.fromstring(image_as_string, (50, 50), "RGB")
@@ -158,6 +157,8 @@ while not done:
 
     
     scaled = scale_image(image, (display_width, display_height))
+
+    gameDisplay.fill((50,50,50))
     gameDisplay.blit(scaled,(0, 0))
     pygame.display.flip()
     clock.tick(60)

@@ -40,7 +40,11 @@ def main():
     connect_socket.bind("tcp://*:8002")
 
     users = {}
-    image = pygame.Surface((50,50))
+    try:
+        image = pygame.image.load_basic("log/canvas.bmp")
+    except:
+        image = pygame.Surface((50,50))
+        image.fill((255,255,255))
 
     while True:
         try:
@@ -54,6 +58,7 @@ def main():
                 y = int(y)
                 color = pygame.Color(color)
                 pygame.draw.rect(image, color, (x, y, 1, 1))
+                pygame.image.save(image, "log/canvas.bmp")
                 userdata = ""
                 
                 for user in users:

@@ -12,3 +12,9 @@ services:
       NAME:
     networks:
       drawing_web:
+    volumes:
+      - type: bind
+        source: ./log/
+        target: /code/log/
+    
+

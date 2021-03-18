@@ -14,6 +14,10 @@ services:
             - "8002"
         networks:
             web:
+        volumes:
+            - type: bind
+              source: ./log/
+              target: /code/log/
     clientd:
         build: clientapp/
         command: ["python", "-u", "client.py"]
@@ -23,4 +27,8 @@ services:
             NAME:
         networks:
             web:
+        volumes:
+            - type: bind
+              source: ./log/
+              target: /code/log/
 
