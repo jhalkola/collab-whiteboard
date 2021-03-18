@@ -21,10 +21,12 @@ services:
     clientd:
         build: clientapp/
         command: ["python", "-u", "client.py"]
+        scale: 10
         environment:
             SERVER_CONNECT_URI: tcp://serverd
             DISPLAY: 
             NAME:
+            TESTING:
         networks:
             web:
         volumes:

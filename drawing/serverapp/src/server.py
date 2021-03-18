@@ -60,12 +60,12 @@ def main():
                 pygame.draw.rect(image, color, (x, y, 1, 1))
                 pygame.image.save(image, "log/canvas.bmp")
                 userdata = ""
-                
+                original_user = user
                 for user in users:
                     userdata += user + users[user]
                 imagedata = pygame.image.tostring(image, "RGB")
 
-                response = struct.pack("8si7500s{}s".format(len(user)*23), image_update_topic, len(users), imagedata, userdata.encode('utf-8'))
+                response = struct.pack("8si7500s16s{}s".format(len(userdata)), image_update_topic, len(users), imagedata, original_user, userdata.encode('utf-8'))
                 pub.send(response)
             if topic == client_disc_topic:
                 _, user = struct.unpack("8s16s", data)
