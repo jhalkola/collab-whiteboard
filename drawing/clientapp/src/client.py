@@ -103,6 +103,13 @@ def scale_image(image, size):
     image = pygame.transform.scale(image, size)
     return image
 
+def update_namelist(users):
+    divider = 10
+    for user in users:
+        text = font.render(user, False, users[user])
+        gameDisplay.blit(text, (display_width+10, divider))
+        divider += 25
+
 clock = pygame.time.Clock()
 done = False
 mouseIsPressed = False
@@ -110,7 +117,7 @@ mouseWasPressed = False
 mouse_prev_x = -1
 mouse_prev_y = -1
 color = (255,0,0)
-
+font = pygame.font.Font('freesansbold.ttf', 20)
 
 
 while not done:
@@ -129,6 +136,11 @@ while not done:
                 users[user_name] = user_color
             img = pygame.image.fromstring(msg[2],(50,50), "RGB")
             image.blit(img, (0, 0))
+            scaled = scale_image(image, (display_width, display_height))
+            gameDisplay.fill((50,50,50))
+            update_namelist(users)
+            gameDisplay.blit(scaled,(0, 0))
+            pygame.display.flip()
     except Exception as e:
         pass#print(e)
 
@@ -154,11 +166,3 @@ while not done:
         mouseWasPressed = True
     else:
         mouseWasPressed = False
-
-    
-    scaled = scale_image(image, (display_width, display_height))
-
-    gameDisplay.fill((50,50,50))
-    gameDisplay.blit(scaled,(0, 0))
-    pygame.display.flip()
-    clock.tick(60)
