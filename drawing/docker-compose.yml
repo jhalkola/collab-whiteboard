@@ -21,7 +21,7 @@ services:
     clientd:
         build: clientapp/
         command: ["python", "-u", "client.py"]
-        scale: 10
+        scale: 8
         environment:
             SERVER_CONNECT_URI: tcp://serverd
             DISPLAY: 
