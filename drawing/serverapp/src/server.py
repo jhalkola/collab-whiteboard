@@ -84,6 +84,7 @@ def main():
                 x = int(x)
                 y = int(y)
                 color = pygame.Color(color)
+                print("Drawing pixel at {}, {} with color {}".format(x,y,color))
 
                 #Use pygame to draw pixel
                 pygame.draw.rect(image, color, (x, y, 1, 1))
@@ -152,9 +153,10 @@ def main():
             pass
     
 
-    if time()>last_save_time+backup_time:
-        #Backup the image
-        pygame.image.save(image, "log/canvas.bmp")
-        last_save_time = time()
+        if time()>last_save_time+backup_time:
+            #Backup the image
+            print("Backing up the image")
+            pygame.image.save(image, "log/canvas.bmp")
+            last_save_time = time()
 
 main()

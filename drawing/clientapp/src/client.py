@@ -72,6 +72,9 @@ image_as_string = ""
 
 #If TESTING-env variable has been set then use randomized names. Otherwise use env-var NAME as name
 is_automatic = os.environ.get('TESTING')
+automatic_limit = int(os.environ.get('LIMIT'))
+sent_messages = 0
+
 if is_automatic=="true":
     name = "client{}".format(random.randint(0,50000))
 else:
@@ -168,7 +171,7 @@ date_string = now.strftime("%d-%m-%Y_%H:%M:%S")
 log_file = open("log/log_{}_{}.txt".format(date_string, name),'w')
 
 #Variables for checking the time for automated drawing
-last_time = time.time()
+last_time = time.time()+15
 send_time = 0
 
 #Scale the image and draw screen for the first time
@@ -208,7 +211,7 @@ while not done:
                 log_file.write("{}\n".format(time_taken))
                 send_time=0
                 #Assing random time for the next automatic pixel
-                last_time = time.time()+random.random()*5
+                last_time = time.time()+random.random()*3
             
             #Get the image data from the bytes
             img = pygame.image.fromstring(msg[2],(10,10), "RGB")
@@ -251,10 +254,11 @@ while not done:
     
     if is_automatic=="true":
         #If testing mode is on send random pixels to the server
-        if time.time()>last_time and send_time==0:
-            x = random.randint(0,10)
-            y = random.randint(0,10)
+        if time.time()>last_time and send_time==0 and sent_messages<automatic_limit:
+            x = random.randint(0,9)
+            y = random.randint(0,9)
             send_time = time.time()
             message = struct.pack("8s16sii", client_draw_topic, name.encode('utf-8'), x, y)
             pub.send(message)
+            sent_messages+=1
             
