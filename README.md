@@ -17,7 +17,19 @@ set NAME=xxxxxxxxxxxxxxxx
 ```
 where xxxx... is max 16 character long string.
 
-To start the server and single client go to the drawing folder and run:
+If you want to use automatic testing you need to add two more environmental variables:
+
+To use the automatic drawing set:
+```
+set TESTING=true
+```
+To limit how many pixels will one client draw set:
+```
+set LIMIT=x
+```
+where x is integer value
+
+To start the server and two client go to the drawing folder and run:
 ```
 docker-compose up
 ```
@@ -29,18 +41,13 @@ docker-compose up
 
 Remember that you have to set new name for the new clients
 
+To run automated test with 5 clients and server go to the drawing folder and run:
+```
+docker-compose -f docker-compose_5.yml
+```
+
 If you make changes to the python files remember to rebuild the composes using:
 ```
 docker-compose build
 ```
 in their respective folders
-
-#To-do
-- data logging
-- saving the image on server side
-- showing names in client (Already received and stored in users-dictionary)
-- documentating
-- commenting the code
-
-Data loggausta ja kuvan tallennusta varten:
-https://docs.docker.com/storage/volumes/
