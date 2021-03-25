@@ -21,13 +21,23 @@ services:
     clientd:
         build: clientapp/
         command: ["python", "-u", "client.py"]
-        scale: 15
         environment:
             SERVER_CONNECT_URI: tcp://serverd
             DISPLAY: 
-            NAME:
-            TESTING:
-            LIMIT:
+            NAME: Pekka
+        networks:
+            web:
+        volumes:
+            - type: bind
+              source: ./log/
+              target: /code/log/
+    clientd2:
+        build: clientapp/
+        command: ["python", "-u", "client.py"]
+        environment:
+            SERVER_CONNECT_URI: tcp://serverd
+            DISPLAY: 
+            NAME: Matti
         networks:
             web:
         volumes:

@@ -18,70 +18,16 @@ services:
             - type: bind
               source: ./log/
               target: /code/log/
-    client1:
+    clientd:
         build: clientapp/
         command: ["python", "-u", "client.py"]
+        scale: 5
         environment:
             SERVER_CONNECT_URI: tcp://serverd
             DISPLAY: 
-            NAME: client1
-            TESTING:
-        networks:
-            web:
-        volumes:
-            - type: bind
-              source: ./log/
-              target: /code/log/
-    client2:
-        build: clientapp/
-        command: ["python", "-u", "client.py"]
-        environment:
-            SERVER_CONNECT_URI: tcp://serverd
-            DISPLAY: 
-            NAME: client2
-            TESTING:
-        networks:
-            web:
-        volumes:
-            - type: bind
-              source: ./log/
-              target: /code/log/
-    client3:
-        build: clientapp/
-        command: ["python", "-u", "client.py"]
-        environment:
-            SERVER_CONNECT_URI: tcp://serverd
-            DISPLAY: 
-            NAME: client3
-            TESTING:
-        networks:
-            web:
-        volumes:
-            - type: bind
-              source: ./log/
-              target: /code/log/
-    client4:
-        build: clientapp/
-        command: ["python", "-u", "client.py"]
-        environment:
-            SERVER_CONNECT_URI: tcp://serverd
-            DISPLAY: 
-            NAME: client4
-            TESTING:
-        networks:
-            web:
-        volumes:
-            - type: bind
-              source: ./log/
-              target: /code/log/
-    client5:
-        build: clientapp/
-        command: ["python", "-u", "client.py"]
-        environment:
-            SERVER_CONNECT_URI: tcp://serverd
-            DISPLAY: 
-            NAME: client5
-            TESTING:
+            NAME:
+            TESTING: true
+            LIMIT: 20
         networks:
             web:
         volumes:
