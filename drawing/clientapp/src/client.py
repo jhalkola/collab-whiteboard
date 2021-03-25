@@ -34,7 +34,8 @@ def exit_handler():
     global name
     global client_disc_topic
     global log_file
-    log_file.close()
+    if log_file:
+        log_file.close()
     message = struct.pack("8s16s", client_disc_topic, name.encode('utf-8'))
     pub.send(message)
 
@@ -72,7 +73,12 @@ image_as_string = ""
 
 #If TESTING-env variable has been set then use randomized names. Otherwise use env-var NAME as name
 is_automatic = os.environ.get('TESTING')
-automatic_limit = int(os.environ.get('LIMIT'))
+automatic_limit = -1
+if is_automatic=="true":
+    try:
+        automatic_limit = int(os.environ.get('LIMIT'))
+    except:
+        pass
 sent_messages = 0
 
 if is_automatic=="true":
@@ -254,7 +260,7 @@ while not done:
     
     if is_automatic=="true":
         #If testing mode is on send random pixels to the server
-        if time.time()>last_time and send_time==0 and sent_messages<automatic_limit:
+        if time.time()>last_time and send_time==0 and (sent_messages<automatic_limit or automatic_limit == -1):
             x = random.randint(0,9)
             y = random.randint(0,9)
             send_time = time.time()

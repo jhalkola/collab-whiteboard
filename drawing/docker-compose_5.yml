@@ -26,7 +26,7 @@ services:
             SERVER_CONNECT_URI: tcp://serverd
             DISPLAY: 
             NAME:
-            TESTING: true
+            TESTING: "true"
             LIMIT: 20
         networks:
             web:
